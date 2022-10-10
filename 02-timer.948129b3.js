@@ -1,0 +1,2 @@
+!function(){document.getElementById("datetime-picker");document.querySelector('[type="button"]').addEventListener("click",(function(){console.log("test")}));document.querySelector(".value[data-days]"),document.querySelector(".value[data-hours]"),document.querySelector(".value[data-minutes]"),document.querySelector(".value[data-seconds]");var e=new Date,t=(e.getDate(),e.getHours(),e.getMinutes());e.getSeconds();console.log(t)}();
+//# sourceMappingURL=02-timer.948129b3.js.map
