@@ -40,11 +40,6 @@ const options = {
   },
 };
 
-const secondCounter = () =>
-  setInterval(() => {
-    return new Date().getTime();
-  }, 1000); //---> odliczanie czasu co sekunde
-
 function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
@@ -54,7 +49,6 @@ function convertMs(ms) {
 
   // Remaining days
   const days = Math.floor(ms / day);
-  daysCounter.innerHTML = days;
   // Remaining hours
   const hours = Math.floor((ms % day) / hour);
   // Remaining minutes
@@ -64,36 +58,55 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-// setInterval(() => {
-//   console.log(
-//     convertMs(new Date().getTime() - calendar.selectedDates[0].getSeconds())
-//   );
-// }, 1000);
+let counterObject = 0;
 
 const calendar = flatpickr(timeInput, options);
-calendar.config.onChange.push(function an() {
-  setInterval(() => {
-    console.log(
-      convertMs(new Date().getTime() - calendar.selectedDates[0].getSeconds())
-    );
-  }, 1000);
+
+const countDown = () => {
+  calendar.config.onChange.push(function difference() {
+    setInterval(() => {
+      counterObject = convertMs(
+        calendar.selectedDates[0].getTime() - new Date().getTime()
+      );
+      secondsCounter.innerHTML = counterObject.seconds;
+      minutesCounter.innerHTML = counterObject.minutes;
+      hoursCounter.innerHTML = counterObject.hours;
+      daysCounter.innerHTML = counterObject.days;
+      function addLeadingZero(value) {
+        if (
+          counterObject.seconds <= 9 ||
+          counterObject.minutes <= 9 ||
+          counterObject.hours <= 9 ||
+          counterObject.days <= 9
+        ) {
+          secondsCounter.innerHTML = secondsCounter.textContent.padStart(
+            2,
+            '0'
+          );
+          minutesCounter.innerHTML = minutesCounter.textContent.padStart(
+            2,
+            '0'
+          );
+          hoursCounter.innerHTML = hoursCounter.textContent.padStart(2, '0');
+          daysCounter.innerHTML = daysCounter.textContent.padStart(2, '0');
+        }
+      }
+      addLeadingZero();
+    }, 1000);
+  });
+};
+
+//refresh the page to change the counter
+let onCloseCheck;
+let isClickedCheck;
+calendar.config.onClose.push(function close() {
+  onCloseCheck = true;
 });
 
-calendar.config.onChange();
-// const timeDifference = () => {
-//   console.log(
-//     setTimeout(() => {
-//       secondCounter() - calendar.selectedDates[0].getSeconds();
-//     }, 1000)
-//   );
-// };
-// setInterval(() => {
-//   timeDifference();
-// }, 1000);
 button.addEventListener('click', () => {
-  secondsCounter.innerHTML = seconds;
-  minutesCounter.innerHTML = calendar.selectedDates[0].getMinutes();
-  hoursCounter.innerHTML = calendar.selectedDates[0].getHours();
-  daysCounter.innerHTML = calendar.selectedDates[0].getDay();
+  isClickedCheck = true;
+  if (isClickedCheck === true && onCloseCheck === true) {
+    button.setAttribute('disabled', '');
+  }
 });
+button.addEventListener('click', countDown());
