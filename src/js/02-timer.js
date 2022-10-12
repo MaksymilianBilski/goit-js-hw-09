@@ -4,6 +4,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 //input / button
 const timeInput = document.getElementById('datetime-picker');
 const button = document.querySelector('[type="button"]');
+button.disabled = true;
 
 //catcihng time fields
 const daysCounter = document.querySelector('.value[data-days]');
@@ -26,14 +27,18 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (button.hasAttribute('disabled')) {
-      return
-    }
     if (
       Math.round(selectedDates[0].getTime() / 2.99999986) <
       Math.round(new Date().getTime() / 3)
     ) {
+      button.disabled = true;
       alert('Please choose a date in the future');
+      return;
+    } else if (
+      Math.round(selectedDates[0].getTime() / 2.99999986) >
+      Math.round(new Date().getTime() / 3)
+    ) {
+      button.disabled = false;
     }
   },
 };
@@ -61,52 +66,35 @@ function convertMs(ms) {
 let counterObject = 0;
 const calendar = flatpickr(timeInput, options);
 
-// check and change the button
-let isButtonClicked;
-button.addEventListener('click', () => {
-  button.setAttribute('disabled', '');
-  isButtonClicked = true;
-});
-
-//timer function
 const countDown = () => {
-  console.log('testlolejny');
-  if (isButtonClicked === true) {
-    //converting the difference in MS to normal date
-
-    calendar.config.onChange.push(function difference() {
-      setInterval(() => {
-        counterObject = convertMs(
-          calendar.selectedDates[0].getTime() - new Date().getTime()
-        );
-        secondsCounter.innerHTML = counterObject.seconds;
-        minutesCounter.innerHTML = counterObject.minutes;
-        hoursCounter.innerHTML = counterObject.hours;
-        daysCounter.innerHTML = counterObject.days;
-        //add zero in timers
-        function addLeadingZero(value) {
-          if (
-            counterObject.seconds <= 9 ||
-            counterObject.minutes <= 9 ||
-            counterObject.hours <= 9 ||
-            counterObject.days <= 9
-          ) {
-            secondsCounter.innerHTML = secondsCounter.textContent.padStart(
-              2,
-              '0'
-            );
-            minutesCounter.innerHTML = minutesCounter.textContent.padStart(
-              2,
-              '0'
-            );
-            hoursCounter.innerHTML = hoursCounter.textContent.padStart(2, '0');
-            daysCounter.innerHTML = daysCounter.textContent.padStart(2, '0');
-          }
-        }
-        addLeadingZero();
-      }, 1000);
-    });
-  }
+  // converting the difference in MS to normal date
+  setInterval(() => {
+    counterObject = convertMs(
+      calendar.selectedDates[0].getTime() - new Date().getTime()
+    );
+    if (new Date().getTime() > calendar.selectedDates[0].getTime()) {
+      return;
+    } else secondsCounter.innerHTML = counterObject.seconds;
+    minutesCounter.innerHTML = counterObject.minutes;
+    hoursCounter.innerHTML = counterObject.hours;
+    daysCounter.innerHTML = counterObject.days;
+    //add zero in timers
+    function addLeadingZero(value) {
+      if (
+        counterObject.seconds <= 9 ||
+        counterObject.minutes <= 9 ||
+        counterObject.hours <= 9 ||
+        counterObject.days <= 9
+      ) {
+        secondsCounter.innerHTML = secondsCounter.textContent.padStart(2, '0');
+        minutesCounter.innerHTML = minutesCounter.textContent.padStart(2, '0');
+        hoursCounter.innerHTML = hoursCounter.textContent.padStart(2, '0');
+        daysCounter.innerHTML = daysCounter.textContent.padStart(2, '0');
+      }
+    }
+    addLeadingZero();
+  }, 1000);
+  button.disabled = true;
 };
 
 button.addEventListener('click', countDown);
