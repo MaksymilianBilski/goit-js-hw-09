@@ -61,23 +61,6 @@ function convertMs(ms) {
 let counterObject = 0;
 const calendar = flatpickr(timeInput, options);
 
-// refresh the page to change the counter
-// let onCloseCheck;
-// let isClickedCheck;
-// calendar.config.onClose.push(function close() {
-//   onCloseCheck = true;
-//   console.log(onCloseCheck);
-// });
-
-// button.addEventListener('click', () => {
-//   isClickedCheck = true;
-//   if (isClickedCheck === true && onCloseCheck === true) {
-//     button.setAttribute('disabled', '');
-//     console.log(button.hasAttribute('disabled'));
-//   }
-// });
-// refresh the page to change the counter
-
 const countDown = () => {
   calendar.config.onChange.push(function difference() {
     setInterval(() => {
@@ -110,7 +93,6 @@ const countDown = () => {
       addLeadingZero();
     }, 1000);
   });
-  console.log('dupa');
 };
 
 button.addEventListener('click', countDown);
