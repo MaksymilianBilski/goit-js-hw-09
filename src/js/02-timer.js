@@ -4,10 +4,6 @@ import 'flatpickr/dist/flatpickr.min.css';
 //input / button
 const timeInput = document.getElementById('datetime-picker');
 const button = document.querySelector('[type="button"]');
-const func = () => {
-  console.log('test');
-};
-button.addEventListener('click', func);
 //
 
 //catcihng time fields
@@ -44,6 +40,11 @@ const options = {
   },
 };
 
+const secondCounter = () =>
+  setInterval(() => {
+    return new Date().getTime();
+  }, 1000); //---> odliczanie czasu co sekunde
+
 function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
@@ -58,23 +59,38 @@ function convertMs(ms) {
   const hours = Math.floor((ms % day) / hour);
   // Remaining minutes
   const minutes = Math.floor(((ms % day) % hour) / minute);
-  minutesCounter.innerHTML = minutes;
   // Remaining seconds
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-  secondsCounter.innerHTML = seconds;
 
   return { days, hours, minutes, seconds };
 }
 
+// setInterval(() => {
+//   console.log(
+//     convertMs(new Date().getTime() - calendar.selectedDates[0].getSeconds())
+//   );
+// }, 1000);
+
 const calendar = flatpickr(timeInput, options);
-
-const timeDifference =
-  new Date().getTime() - calendar.selectedDates[0].getTime();
-const secondCounter = () =>
+calendar.config.onChange.push(function an() {
   setInterval(() => {
-    convertMs(timeDifference);
+    console.log(
+      convertMs(new Date().getTime() - calendar.selectedDates[0].getSeconds())
+    );
   }, 1000);
+});
 
+calendar.config.onChange();
+// const timeDifference = () => {
+//   console.log(
+//     setTimeout(() => {
+//       secondCounter() - calendar.selectedDates[0].getSeconds();
+//     }, 1000)
+//   );
+// };
+// setInterval(() => {
+//   timeDifference();
+// }, 1000);
 button.addEventListener('click', () => {
   secondsCounter.innerHTML = seconds;
   minutesCounter.innerHTML = calendar.selectedDates[0].getMinutes();
