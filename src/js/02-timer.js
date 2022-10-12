@@ -59,8 +59,24 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 let counterObject = 0;
-
 const calendar = flatpickr(timeInput, options);
+
+//refresh the page to change the counter
+// let onCloseCheck;
+// let isClickedCheck;
+// calendar.config.onClose.push(function close() {
+//   onCloseCheck = true;
+//   console.log(onCloseCheck);
+// });
+
+// button.addEventListener('click', () => {
+//   isClickedCheck = true;
+//   if (isClickedCheck === true && onCloseCheck === true) {
+//     button.setAttribute('disabled', '');
+//     console.log(button.hasAttribute('disabled'));
+//   }
+// });
+//refresh the page to change the counter
 
 const countDown = () => {
   calendar.config.onChange.push(function difference() {
@@ -94,19 +110,7 @@ const countDown = () => {
       addLeadingZero();
     }, 1000);
   });
+  console.log('dupa');
 };
 
-//refresh the page to change the counter
-let onCloseCheck;
-let isClickedCheck;
-calendar.config.onClose.push(function close() {
-  onCloseCheck = true;
-});
-
-button.addEventListener('click', () => {
-  isClickedCheck = true;
-  if (isClickedCheck === true && onCloseCheck === true) {
-    button.setAttribute('disabled', '');
-  }
-});
-button.addEventListener('click', countDown());
+button.addEventListener('click', countDown);
