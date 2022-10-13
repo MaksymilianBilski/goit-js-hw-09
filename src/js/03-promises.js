@@ -15,8 +15,7 @@ function createPromise(position, delay) {
         reject({ position, delay });
         // Reject
       }
-    }),
-      delay;
+    }, delay);
   });
 }
 const addPromises = e => {
@@ -24,13 +23,13 @@ const addPromises = e => {
   let waitDelay = Number(delayInput.value);
   let step = Number(stepInput.value);
 
-  for (let i = 0; i <= amountInput.value; i++) {
+  for (let i = 1; i <= amountInput.value; i++) {
     createPromise(i, waitDelay)
-      .then(() => {
-        console.log({ i, delay });
+      .then(({ position, delay }) => {
+        console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
       })
-      .catch(() => {
-        console.log('error');
+      .catch(({ position, delay }) => {
+        console.log(`❌ Rejected promise ${position} in ${delay}ms`);
       });
     waitDelay += step;
   }
