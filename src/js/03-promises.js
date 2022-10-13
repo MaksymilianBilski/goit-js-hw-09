@@ -10,30 +10,31 @@ function createPromise(position, delay) {
       const shouldResolve = Math.random() > 0.3;
       if (shouldResolve) {
         resolve({ position, delay });
+        // Fulfill
       } else {
         reject({ position, delay });
+        // Reject
       }
-    }, delay);
+    }),
+      delay;
   });
 }
 
-form.addEventListener('submit', () => {
+const addPromises = e => {
+  e.preventDefault();
+  let waitDelay = Number(delayInput.value);
+  let step = Number(stepInput.value);
+
   for (let i = 0; i <= amountInput.value; i++) {
-    createPromise(i, delayInput.value)
-      .then(({ position, delay }) => {
-        console.log({ position, delay });
+    createPromise(i, waitDelay)
+      .then(() => {
+        console.log({ i, delay });
       })
-      .catch(({ position, delay }) => {
-        console.log({ position, delay });
+      .catch(() => {
+        console.log('error');
       });
+    waitDelay += step;
   }
-});
-// const promise = new Promise((resolve, reject) => {
-//   setTimeout(() => {
-//     if (resolve) {
-//       createPromise();
-//     } else if (reject) {
-//       console.log('test');
-//     }
-//   }, 1000);
-// });
+};
+
+form.addEventListener('submit', addPromises);
