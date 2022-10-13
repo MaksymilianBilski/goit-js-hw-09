@@ -19,7 +19,6 @@ function createPromise(position, delay) {
       delay;
   });
 }
-
 const addPromises = e => {
   e.preventDefault();
   let waitDelay = Number(delayInput.value);
