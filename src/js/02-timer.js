@@ -1,3 +1,4 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
@@ -32,7 +33,7 @@ const options = {
       Math.round(new Date().getTime() / 3)
     ) {
       button.disabled = true;
-      alert('Please choose a date in the future');
+      Notify.failure('Please choose a date in the future');
       return;
     } else if (
       Math.round(selectedDates[0].getTime() / 2.99999986) >
