@@ -28,17 +28,11 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (
-      Math.round(selectedDates[0].getTime() / 2.99999986) <
-      Math.round(new Date().getTime() / 3)
-    ) {
+    if (selectedDates[0].getTime() < new Date().getTime()) {
       button.disabled = true;
       Notify.failure('Please choose a date in the future');
       return;
-    } else if (
-      Math.round(selectedDates[0].getTime() / 2.99999986) >
-      Math.round(new Date().getTime() / 3)
-    ) {
+    } else if (selectedDates[0].getTime() > new Date().getTime()) {
       button.disabled = false;
     }
   },
