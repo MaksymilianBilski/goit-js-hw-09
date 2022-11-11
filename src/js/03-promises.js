@@ -47,6 +47,7 @@ const amountInput = document.querySelector('input[name=amount]');
 const buttonCreate = document.querySelector('button[type=submit]');
 const form = document.querySelector('.form');
 let delay = delayInput.value;
+let step = stepInput.value;
 
 function createPromises(position, delay) {
   const shouldResolve = Math.random() < 0.3;
@@ -60,17 +61,24 @@ function createPromises(position, delay) {
 
 function addPromises(e) {
   e.preventDefault();
-  new Promise = createPromises((resolve, reject) => {
-    setTimeout(() => {
-      const shouldResolve = Math.random() < 0.3;
-      if (shouldResolve) {
-        resolve({ position, delay });
-      }
-      else {
-        reject({ position, delay });
-      }
-    }, delay)
-  }).then(() => {
-
-  })
+  for (let i = 0; i <= amountInput.value; i++) {
+    new Promise = createPromises((resolve, reject) => {
+      setTimeout(() => {
+        const shouldResolve = Math.random() < 0.3;
+        if (shouldResolve) {
+          resolve({ position, delay });
+        }
+        else {
+          reject({ position, delay });
+        }
+      }, delay)
+    }).then(({ position, delay }) => {
+      Notify.success('sukces' + { position, delay })
+    }).catch(({ position, delay }) => {
+      Notify.failure('failure' + { position, delay })
+    })
+  }
+  delay += step;
 }
+
+form.addEventListener("submit", addPromises)
